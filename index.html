@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主题色组生成器</title>
+    <!-- Import style -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/element-plus/dist/index.css" />
+    <!-- 引入 Vue.js 的 CDN 链接 -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@3"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <!-- Import component library -->
+    <script src="https://cdn.jsdelivr.net/npm/element-plus"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 在这里编写您的 Vue.js 应用 -->
+        <div class="body">
+            <div class="active-header">
+                <div class="active-header-title">主题配置</div>
+            </div>
+            <div class="form-body">
+                <el-form :model="formLabelAlign">
+                    <el-form-item>
+                        <el-input :input-style="inputStyle" type="color" v-model="formLabelAlign.primary"
+                            @change="createColorGroup" placeholder="请输入主题色" />
+                    </el-form-item>
+                    <div v-if="formLabelAlign.primaryLight3">
+                        <div>
+                            <label for="">primaryLight3：</label>
+                            <input type="color" :value="formLabelAlign.primaryLight3"
+                                style="width: 50px; height: 25px;">
+                            <div style="width: 150px; height: 25px; margin-top: 5px;"
+                                :style="{ backgroundColor: formLabelAlign.primaryLight3 }">
+                                {{formLabelAlign.primaryLight3}}
+                            </div>
+                        </div>
+                        <div class="m-t-10">
+                            <label for="">primaryLight5：</label>
+                            <input type="color" :value="formLabelAlign.primaryLight5"
+                                style="width: 50px; height: 25px;">
+                            <div style="width: 150px; height: 25px;margin-top: 5px;"
+                                :style="{ backgroundColor: formLabelAlign.primaryLight5 }">
+                                {{formLabelAlign.primaryLight5}}
+                            </div>
+                        </div>
+                        <div class="m-t-10">
+                            <label for="">primaryLight7：</label>
+                            <input type="color" :value="formLabelAlign.primaryLight7"
+                                style="width: 50px; height: 25px;">
+                            <div style="width: 150px; height: 25px; margin-top: 5px;"
+                                :style="{ backgroundColor: formLabelAlign.primaryLight7 }">
+                                {{
+                                formLabelAlign.primaryLight7 }}
+                            </div>
+                        </div>
+                        <div class="m-t-10">
+                            <label for="">primaryLight8：</label>
+                            <input type="color" :value="formLabelAlign.primaryLight8"
+                                style="width: 50px; height: 25px;">
+                            <div style="width: 150px; height: 25px; margin-top: 5px;"
+                                :style="{ backgroundColor: formLabelAlign.primaryLight8 }">{{
+                                formLabelAlign.primaryLight8 }}</div>
+                        </div>
+                        <div class="m-t-10">
+                            <label for="">primaryLight9：</label>
+                            <input type="color" :value="formLabelAlign.primaryLight9"
+                                style="width: 50px; height: 25px;">
+                            <div style="width: 150px; height: 25px; margin-top: 5px;"
+                                :style="{ backgroundColor: formLabelAlign.primaryLight9 }">{{
+                                formLabelAlign.primaryLight9 }}</div>
+                        </div>
+                        <div class="m-t-10">
+                            <label for="">primaryDark2：</label>
+                            <input type="color" :value="formLabelAlign.primaryDark2" style="width: 50px; height: 25px;">
+                            <div style="width: 150px; height: 25px;margin-top: 5px;"
+                                :style="{ backgroundColor: formLabelAlign.primaryDark2 }">{{ formLabelAlign.primaryDark2
+                                }}</div>
+                        </div>
+                    </div>
+                    <div class="acti-btn g-m-t-42" @click="generateTheme">
+                        <span>生成主题色</span>
+                    </div>
+                </el-form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .body {
+            width: 100%;
+            padding-top: 12px;
+            padding-bottom: 10px;
+            margin: 0 48px;
+        }
+
+        .form-body {
+            width: 100%;
+            margin-top: 12px;
+
+            :deep(.el-input__wrapper) {
+                border-radius: 8px;
+                background-color: #FAFAFB;
+            }
+
+            :deep(.el-input__wrapper.is-focus) {
+                box-shadow: 0 0 0 2px #D71718 inset;
+                background-color: #FFFFFF;
+            }
+
+            :deep(.el-checkbox__label) {
+                font-size: 14px;
+                font-family: PingFangSC-Regular, PingFang SC;
+                font-weight: 400;
+                color: #333333;
+                line-height: 20px;
+            }
+        }
+
+        .m-t-10 {
+            margin-top: 10px;
+        }
+    </style>
+
+    <script>
+        const { reactive } = Vue;
+        // 使用组合式 API 创建 Vue 3 实例
+        const app = Vue.createApp({
+            setup() {
+                // 在 setup 函数中使用 ref 创建响应式数据
+                const formLabelAlign = reactive({
+                    primary: "",
+                    primaryLight3: "",
+                    primaryLight5: "",
+                    primaryLight7: "",
+                    primaryLight8: "",
+                    primaryLight9: "",
+                    primaryDark2: "",
+                });
+                const inputStyle = {
+                    height: "60px",
+                    fontSize: "16px",
+                    lineHeight: "22px",
+                    maxWidth: "300px",
+                };
+                // onMounted(() => {
+                //     formLabelAlign.primary = color;
+                //     //console.log('color', color);
+                //     createColorGroup(color);//'#ED4E38'
+                // })
+
+                /**创建主题色组 */
+                const createColorGroup = (color) => {
+                    formLabelAlign.primaryLight3 = generateLighterColor(color, 0.3);
+                    formLabelAlign.primaryLight5 = generateLighterColor(color, 0.5);
+                    formLabelAlign.primaryLight7 = generateLighterColor(color, 0.7);
+                    formLabelAlign.primaryLight8 = generateLighterColor(color, 0.8);
+                    formLabelAlign.primaryLight9 = generateLighterColor(color, 0.9);
+                    formLabelAlign.primaryDark2 = generateLighterColor(color, -0.2);
+                    console.log(formLabelAlign);
+                }
+
+                /**生成对应比例的深浅色
+                 * @param color 基准色值（Hex类型  ）
+                 * @param factor -1~1 深浅比率（>0浅）
+                 * @returns
+                 */
+                const generateLighterColor = (color, factor) => {
+                    let whiteColorRgb = hexToRGB('#ffffff');
+                    let blackColorRgb = hexToRGB('#000000');
+                    let colorRgb = hexToRGB(color);
+                    let newColorRgb = colorRgb;
+                    if (factor > 0) {
+                        newColorRgb = {
+                            red: colorRgb.red + (whiteColorRgb.red - colorRgb.red) * factor,
+                            green: colorRgb.green + (whiteColorRgb.green - colorRgb.green) * factor,
+                            blue: colorRgb.blue + (whiteColorRgb.blue - colorRgb.blue) * factor,
+                        }
+                    } else {
+                        newColorRgb = {
+                            red: colorRgb.red - (colorRgb.red - blackColorRgb.red) * Math.abs(factor),
+                            green: colorRgb.green - (colorRgb.green - blackColorRgb.green) * Math.abs(factor),
+                            blue: colorRgb.blue - (colorRgb.blue - blackColorRgb.blue) * Math.abs(factor),
+                        }
+                    }
+
+                    return rgbToHex(newColorRgb);
+                }
+
+                /**生成对应比例的透明色
+                 * @param color 基准色值（Hex类型  ）
+                 * @param opacity
+                 * @returns
+                 */
+                const generateLighterColor2 = (color, opacity) => {
+                    // 确保透明度在有效范围内（0到1之间）
+                    opacity = Math.max(0, Math.min(1, opacity));
+                    // 将透明度转换为十六进制
+                    let opacityHex = Math.round((1-opacity) * 255).toString(16);
+                    // 确保十六进制透明度是两位数
+                    if (opacityHex.length === 1) {
+                        opacityHex = '0' + opacityHex;
+                    }
+
+                    return color + opacityHex;
+                }
+
+                // 将十六进制颜色转换为RGB形式
+                function hexToRGB(hex) {
+                    const bigint = parseInt(hex.slice(1), 16);
+                    const red = (bigint >> 16) & 255;
+                    const green = (bigint >> 8) & 255;
+                    const blue = bigint & 255;
+                    return { red, green, blue };
+                }
+
+                // 将RGB颜色转换为十六进制形式
+                function rgbToHex(rgb) {
+                    const { red, green, blue } = rgb;
+                    return `#${(1 << 24 | red << 16 | green << 8 | blue).toString(16).slice(1)}`;
+                }
+
+                // const generateTheme = () =>{
+                //     createColorGroup(formLabelAlign.primary);
+                // }
+                /**应用主题色 */
+                // const useTheme = () => {
+                //     if (formLabelAlign.primary) {
+                //         localStorage.removeItem('TabActiBg');
+                //         localStorage.setItem('themeColor', formLabelAlign.primary);
+                //         const el = document.documentElement
+                //         el.style.setProperty('--primary-color', formLabelAlign['primary']);
+                //         el.style.setProperty('--el-color-primary', formLabelAlign['primary'])
+                //         el.style.setProperty('--el-color-primary-light-3', formLabelAlign['primaryLight3'])
+                //         el.style.setProperty('--el-color-primary-light-5', formLabelAlign['primaryLight5'])
+                //         el.style.setProperty('--el-color-primary-light-7', formLabelAlign['primaryLight7'])
+                //         el.style.setProperty('--el-color-primary-light-8', formLabelAlign['primaryLight8'])
+                //         el.style.setProperty('--el-color-primary-light-9', formLabelAlign['primaryLight9'])
+                //         el.style.setProperty('--el-color-primary-dark-2', formLabelAlign['primaryDark2'])
+                //         router.go(0);
+                //     }
+                // }
+
+                // 返回数据对象，使其可在模板中访问
+                return {
+                    formLabelAlign,
+                    inputStyle,
+                    createColorGroup
+                };
+            }
+        });
+        app.use(ElementPlus);
+        // 挂载应用到 DOM 元素上
+        app.mount('#app');
+    </script>
+
+</body>
+
+</html>
